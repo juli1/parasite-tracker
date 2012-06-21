@@ -21,7 +21,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
 
 public class Scores extends SQLiteOpenHelper {
 
@@ -63,48 +63,31 @@ public class Scores extends SQLiteOpenHelper {
 
 	    public Integer[] getHighScores ()
 	    {
-	    	Log.i (TAG, "Will get the scores");
-
 	    	Integer[] scores;
 	    	int i = 0;
 	    	int colIndex;
 	    	SQLiteDatabase db = this.getWritableDatabase ();
 	    	Cursor cursor = db.query (TABLE_NAME, null, null, null, null, null, null, null);
-	    	Log.i (TAG, "COUNT=" + cursor.getCount());
+
 	    	scores = new Integer[cursor.getCount()];
     		cursor.moveToNext();
 
 	    	while (! cursor.isLast())
-	    	{
-		    	Log.i (TAG, "COLUMNS COUNT=" + cursor.getColumnCount());
-		    	
+	    	{    	
 		    	try 
 		    	{
 		    		colIndex = cursor.getColumnIndex ("score");
-			    	Log.i (TAG, "colIndex " + colIndex );
 			    	
-			    	if (colIndex != -1)
-			    	{
-			    		Log.i (TAG, "Value at column " + colIndex + "=" + cursor.getInt (colIndex));
-			    		
-			    	}
+			 
 			    	colIndex = cursor.getColumnIndex ("record_date");
-			    	Log.i (TAG, "colIndex " + colIndex );
-			    	
-			    	if (colIndex != -1)
-			    	{
-			    		Log.i (TAG, "Value at column " + colIndex + "=" + cursor.getString (colIndex));
-			    	}
+			 
 		    	}
 		    	catch (Exception e)
 		    	{
-		    		Log.e (TAG, "EXCEPTION" + e.toString());
+//		    		Log.e (TAG, "EXCEPTION" + e.toString());
 		    	}
 		    	
-	    		/*
-	    		scores[i] = cursor.getInt (1);
-	    		Log.i (TAG, "score at " + i + " value " + scores[i]);
-	    		*/
+	    		
 	    		i++;
 	    		cursor.moveToNext();
 	    	}
@@ -114,7 +97,6 @@ public class Scores extends SQLiteOpenHelper {
 	    
 	    public void registerScore (int score)
 	    {
-	    	Log.i (TAG, "Will register a new score : " + score);
 	    	String date;
 	    	Calendar c = Calendar.getInstance();
 	    	date = c.get(Calendar.YEAR) + "-" +
@@ -125,16 +107,16 @@ public class Scores extends SQLiteOpenHelper {
 	    	ContentValues scoreValues = new ContentValues();
 	    	scoreValues.put ("score", score);
 	    	scoreValues.put ("record_date", date);
-	    	Log.i (TAG, "Before get DB");
+	    	
 	    	SQLiteDatabase db = this.getWritableDatabase ();
-	    	Log.i (TAG, "After get DB");
+	    	
 	    	if (db.insert (TABLE_NAME, null, scoreValues) == -1)
 	    	{
-	    		Log.e (TAG, "ERROR WHEN INSERT");
+	    		//Log.e (TAG, "ERROR WHEN INSERT");
 	    	}
 	    	else
 	    	{
-	    		Log.i (TAG, "INSERT SUCCESFUL");
+	    		//Log.i (TAG, "INSERT SUCCESFUL");
 	    	}
 	    	this.sendScore (score, date);
 
@@ -146,40 +128,33 @@ public class Scores extends SQLiteOpenHelper {
     		username = preferences.getString ("username", "F. Fillon");
     		String location;
     		location = preferences.getString ("location", "Ef213");
-    		Log.i(TAG, "username" + username);
-    		Log.i(TAG, "location" + location);
     		HttpClient httpclient = new DefaultHttpClient();
-    		// On créé notre entête
+    		
     		HttpPost httppost = new HttpPost("http://pok.safety-critical.net/chronopost.php");
 
     		try {
-    			// On ajoute nos données dans une liste
+    		
     			List nameValuePairs = new ArrayList(3);
 
-    			// On ajoute nos valeurs ici un identifiant et un message
+    		
     			nameValuePairs.add(new BasicNameValuePair("score", ""+score));
     			nameValuePairs.add(new BasicNameValuePair("date", date));
     			nameValuePairs.add(new BasicNameValuePair("user", username + "@" + location));
-
-    			// Ajoute la liste à notre entête
     			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-    			// On exécute la requête tout en récupérant la réponse
     			HttpResponse response = httpclient.execute(httppost);
 
-    			// On peut maintenant afficher la réponse
-    			Log.e(TAG, "HTTP answer " + response.toString());
 
     		} catch (ClientProtocolException e) {
-    			Log.e(TAG,e.toString());
+    			
     		} catch (IOException e) {
-    			Log.e(TAG,e.toString());
+    			
     		}
     	}
 	    
 	    
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			Log.i (TAG, "update database, do nothing");
+			
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 			onCreate (db);
 		}
@@ -187,14 +162,14 @@ public class Scores extends SQLiteOpenHelper {
 		
 		public void reset()
 		{
-			Log.i (TAG, "reset scores");
+			
 			SQLiteDatabase db = this.getWritableDatabase ();
 			db.delete (TABLE_NAME, null, null);
 		}
 		
 		public void sendAll()
 		{
-			Log.i (TAG, "Will send all scores");
+			
 			String dateStr;
 	    	int score;
 	    	int i = 0;
@@ -203,7 +178,7 @@ public class Scores extends SQLiteOpenHelper {
 	    	SQLiteDatabase db = this.getWritableDatabase ();
 	    	Cursor cursor = db.query (TABLE_NAME, null, null, null, null, null, null, null);
 	    	
-	    	Log.i (TAG, "COUNT=" + cursor.getCount());
+	    	
 	    	count =  cursor.getCount();
     		cursor.moveToFirst();
 	    	for (i = 0 ; i < count ; i++)
@@ -217,7 +192,7 @@ public class Scores extends SQLiteOpenHelper {
 		    	}
 		    	catch (Exception e)
 		    	{
-		    		Log.e (TAG, "EXCEPTION" + e.toString());
+		    
 		    	}
 	    		cursor.moveToNext();
 	    	}
@@ -227,7 +202,7 @@ public class Scores extends SQLiteOpenHelper {
 		
 		public String[] getScores()
 		{
-			Log.i (TAG, "Will get the scores");
+			
 			String[] dateStr;
 			Date dateObj;
 	    	String[] scores;
@@ -237,7 +212,6 @@ public class Scores extends SQLiteOpenHelper {
 	    	SQLiteDatabase db = this.getWritableDatabase ();
 	    	Cursor cursor = db.query (TABLE_NAME, null, null, null, null, null, "score", null);
 	    	
-	    	Log.i (TAG, "COUNT=" + cursor.getCount());
 	    	count =  cursor.getCount();
 	    	scores = new String[count];
     		cursor.moveToLast();
@@ -256,7 +230,7 @@ public class Scores extends SQLiteOpenHelper {
 		    	}
 		    	catch (Exception e)
 		    	{
-		    		Log.e (TAG, "EXCEPTION" + e.toString());
+		    
 			    	scores[i] = "score " + i ;
 		    	}
 	    		cursor.moveToPrevious();

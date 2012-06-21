@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
@@ -61,7 +60,6 @@ public class MainActivity extends Activity implements OnChronometerTickListener{
     public void startStopChrono (View view)
     {
     	Chronometer chrono;
-    	Log.i (TAG, "Start ParasiteTracker");
     	if (isStarted == false)
     	{
 	    	chrono = (Chronometer) findViewById(R.id.chronometer1);
@@ -78,7 +76,6 @@ public class MainActivity extends Activity implements OnChronometerTickListener{
         	long currentTime = SystemClock.elapsedRealtime();
         	long baseTime = chrono.getBase ();
         	long elapsed = (currentTime - baseTime) / 1000;
-        	Log.i (TAG, "elapsed = " + elapsed);
         	ImageView iv = (ImageView) findViewById(R.id.image);
         	iv.setImageResource (R.drawable.parasite2);
         	scores.registerScore ( (int)elapsed);
@@ -91,15 +88,12 @@ public class MainActivity extends Activity implements OnChronometerTickListener{
     
     public void editPreferences (View view)
     {
-
-    	Log.i (TAG, "Edit Preferences");
     	Intent intent = new Intent(this, AppPreferences.class);
     	startActivity(intent);
     }
     
     public void resetScores (View view)
     {
-    	Log.i (TAG, "Reset Scores");
     	scores.reset();
     	this.updateScores();
     }
