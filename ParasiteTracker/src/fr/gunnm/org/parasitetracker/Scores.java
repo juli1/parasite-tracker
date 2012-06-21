@@ -1,4 +1,4 @@
-package fr.gunnm.org.parasiterecord;
+package fr.gunnm.org.parasitetracker;
 
 import java.io.IOException;
 import java.util.ArrayList;

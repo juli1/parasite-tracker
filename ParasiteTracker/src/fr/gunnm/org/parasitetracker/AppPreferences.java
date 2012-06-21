@@ -1,6 +1,6 @@
-package fr.gunnm.org.parasiterecord;
+package fr.gunnm.org.parasitetracker;
 
-import fr.gunnm.org.parasiterecord.R;
+import fr.gunnm.org.parasitetracker.R;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
